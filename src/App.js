@@ -5,6 +5,7 @@ import HomePage from "./HomePage";
 // import Mycomponent from "./Component/myComponent"
 import ComponentA from "./Component/ComponentA"
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import FormName from "../src/Component/FormName"
 
 const Mycomponent = lazy(()=>import("./Component/myComponent"))
 const FirstName = createContext()
@@ -14,7 +15,7 @@ function App() {
   return (
    
     <Router>
-      <div className="App">
+      <div >
         {/* <FirstName.Provider value={"reetika singh"}>
           <SecondName.Provider value={"chhotu"}>
               <ComponentA/>
@@ -24,10 +25,11 @@ function App() {
         <Suspense fallback={<div>Loading....</div>}>
         <Mycomponent></Mycomponent>
         </Suspense> */}
-        <Switch>
+        <FormName/>
+        {/* <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/blogs" component={BlogComponent} />
-        </Switch>
+        </Switch> */}
       </div>
     </Router>
    
