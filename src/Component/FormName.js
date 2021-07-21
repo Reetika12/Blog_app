@@ -2,10 +2,52 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import BackupIcon from "@material-ui/icons/Backup";
 import TextField from "@material-ui/core/TextField";
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
 
 function FormComponent() {
   const [clicked, setClicked] = useState("PAN Card");
   const [fileUploadState, setfileUploadState] = useState("");
+  const [flag,setFlag]=useState(true);
+  const [finalButton,setFinalButton]=useState(false);
+  const [panCardNumber,setpanCardNumber]=useState("")
+  const [dematId,setdematId]=useState("")
+  const [accountNumber,setaccountNumber]=useState("")
+  const [confirmAccountNumber,setconfirmAccountNumber]=useState("")
+  const [ifscCode,setifscCode]=useState("")
+  const [open, setOpen] = React.useState(false);
+// const [state, setState] = React.useState({
+//     open: false,
+//     vertical: 'top',
+//     horizontal: 'center',
+//   });
+  const [userKYC, setUserKYC] = React.useState({
+    "message": "Success",
+    "panNumber": "AAAA1234A",
+    "panName": "Grey Hound",
+    "panAwsFilename": "aws_location_url",
+    "accountName": "Hound Grey",
+    "accountNumber": "789456123123",
+    "ifsc": "something",
+    "dpId": "123456",
+    "clientId": "654321",
+    "dematAwsFilename": "aws_location_url",
+  })
+  
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    // setState({open: false})
+    setOpen(false);
+  };
+ const openPopup=()=>
+ {
+    // setState({open: true, ...newState})
+    setOpen(true);
+ }
+//  const {register,handleSubmit,control,errors} = useForm();
 
   const fileUploadButton = () => {
     document.getElementById("upload-input").click();
@@ -14,13 +56,6 @@ function FormComponent() {
     };
   };
 
-  //   function usePrevious(value) {
-  //     const ref = useRef();
-  //     useEffect(() => {
-  //       ref.current = value;
-  //     });
-  //     return ref.current;
-  //   }
   const ListCard = [
     { item: "PAN Card", key: "panCard" },
     { item: "Bank Account Details", key: "bankAccountDetails" },
@@ -29,99 +64,211 @@ function FormComponent() {
 
   const toggle = (index) => {
     setClicked(index);
-    // setFlag(!flag)
   };
-  //   const CommonFunction = (index) => {
-  //       switch (index) {
-  //         case 0:
-  //           return <h1>first component</h1>;
-  //           break;
-  //         case 1:
-  //           return <h1>second component</h1>;
-  //           break;
-  //         case 2:
-  //           return <h1>second component</h1>;
-  //           break;
-  //       }
-  //   };
+//   CommonComponent(
+//     "Pan Card",
+//     "Please enter the below details",
+//     "PAN Number",
+//     "showpanName",
+//     "uploadText",
+//     "Bank Account Details"
+//   );
+  //
+  const HandleChange = (value,id)=>{
+    // setValue(document.getElementById(id))
+    //   console.log("id",document.getElementById(id))
+      if(id==="panCard")
+      {
+        setpanCardNumber(value)
+          console.log("VALUE",panCardNumber)
+      }
+      else if(id==="dematAccount")
+      {
+        setdematId(value)
+        console.log("dematid",dematId)
+      }
+      else if(id==="accountNumber")
+      {
+        setaccountNumber(value)
+        console.log("accountnumber",accountNumber)
+      }
+      else if(id==="confirmAccountNumber")
+      {
+        setconfirmAccountNumber(value)
+        console.log("confirmAccountNumber",confirmAccountNumber)
+      }
+      else if(id==="ifscCode")
+      {
+        setifscCode(value)
+        console.log("ifsccode",ifscCode)
+      }
+
+  }
+  function CommonComponent(
+    id,
+    panheading,
+    enterText,
+    labelName,
+    showpanName,
+    uploadText,
+    nextComp
+  ) {
+    return (
+      <div style={{ width: "40%" }}>
+        <Panheading>{panheading}</Panheading>
+        {/* <Alert onClose={() => {}}>This is a success alert — check it out!</Alert> */}
+        <Formsec>
+          <EnterDetails>{enterText}</EnterDetails>
+          <Formpan>
+            <TextField
+              style={{ marginRight: "100px" }}
+              id={id}
+              onChange={e => {
+                HandleChange(e.target.value,id);
+            }}
+            // value={id==="panCard" ? panCardNumber:""}
+            // value={value}
+            //   error={true}
+            //   helperText="pan is required"
+              label={labelName}
+            />
+            {showpanName && (
+              <PandisplayName>
+                <EnterDetails pan>PAN Name</EnterDetails>
+                <div>Reetika</div>
+              </PandisplayName>
+            )}
+          </Formpan>
+          <Divider>
+            <DividerSpan>AND</DividerSpan>
+          </Divider>
+          <UploadArea>
+            <input
+              style={{ position: "absolute", width: "0", opacity: "0" }}
+              accept="image/*,application/pdf"
+              id="upload-input"
+              type="file"
+            />
+            <Label onClick={fileUploadButton}>
+              <BackupIcon style={{ color: "green" }}></BackupIcon>
+              <SpanText>
+                {fileUploadState
+                  ? fileUploadState
+                  : "Click here to upload or Drag and drop"}
+              </SpanText>
+            </Label>
+          </UploadArea>
+          <UploadFormat>{uploadText}</UploadFormat>
+          <Button flag={flag} onClick={() => toggle(nextComp)}>Submit</Button>
+        </Formsec>
+      </div>
+    );
+  }
   return (
     <ParentComponent>
+        <Snackbar
+         open={open} autoHideDuration={6000} onClose={handleClose}
+          key={"top"+"center"}
+        >
+        <Alert onClose={handleClose} severity="success">
+          This is a success message!
+        </Alert>
+      </Snackbar>
+      <div>
+      KYC verification takes upto 48 hours after you submit your details. Kindly finish your KYC verification before to be investment ready.
+      </div>
       <KycParent>
         <Kycheading>Complete your KYC</Kycheading>
         <div style={{ width: "100%", display: "flex" }}>
           <LeftHalf>
-              {ListCard.map((item)=>{
-                  return <div
+            {ListCard.map((item) => {
+              return (
+                <div
                   key="left-nav"
                   style={{ display: "flex", flexDirection: "column" }}
                 >
-                <KycLeft onClick={() => toggle(item.item, "highLightEvent1")}>
-                  <PanCard
-                    style={
-                      clicked===item.item
-                        ? { "border-color": "#008000" }
-                        : {}
-                    }
-                  >
-                    {item.item}
-                  </PanCard>
-                </KycLeft>
+                  <KycLeft onClick={() => toggle(item.item)}>
+                    <PanCard
+                      style={
+                        clicked === item.item
+                          ? { "border-color": "#008000" }
+                          : {}
+                      }
+                    >
+                      {item.item}
+                    </PanCard>
+                  </KycLeft>
                 </div>
-              })}
+              );
+            })}
           </LeftHalf>
 
-          {clicked === "PAN Card" && (
+          {clicked === "PAN Card" &&
+            CommonComponent(
+              "panCard",
+              "Pan Card",
+              "Please enter the below details",
+              "PAN Number",
+              "showpanName",
+              "Upload a copy of pan card in pdf/jpeg/png format",
+              "Bank Account Details"
+            )
+          }
+          {clicked === "Bank Account Details" && (
             <div style={{ width: "40%" }}>
-              <Panheading>Pan Card</Panheading>
-              <UploadArea>
-                <input
-                  style={{ position: "absolute", width: "0", opacity: "0" }}
-                  accept="image/*,application/pdf"
-                  id="upload-input"
-                  type="file"
-                />
-                <Label onClick={fileUploadButton}>
-                  <BackupIcon style={{ color: "green" }}></BackupIcon>
-                  <SpanText>
-                    {fileUploadState
-                      ? fileUploadState
-                      : "Click here to upload or Drag and drop"}
-                  </SpanText>
-                </Label>
-              </UploadArea>
-              <UploadFormat>
-                Upload a copy of pan card in pdf/jpeg/png format
-              </UploadFormat>
-              <Divider>
-                <DividerSpan>AND</DividerSpan>
-              </Divider>
+              <Panheading>Bank Account Details</Panheading>
               <Formsec>
                 <EnterDetails>Please enter the below details</EnterDetails>
                 <Formpan>
                   <TextField
-                    style={{ marginRight: "100px" }}
-                    id="standard-basic"
-                    label="PAN Number"
+                    style={{ marginRight: "40px", width: "150px" }}
+                    id="accountNumber"
+                    label="Account Number"
+                    onChange={e => {
+                        HandleChange(e.target.value,"accountNumber");
+                    }}
                   />
-
-                  <PandisplayName>
-                    <EnterDetails pan>PAN Name</EnterDetails>
-                    <div>Reetika</div>
-                  </PandisplayName>
+                  <TextField
+                    style={{ width: "200px" }}
+                    id="confirmAccountNumber"
+                    onChange={e => {
+                        HandleChange(e.target.value,"confirmAccountNumber");
+                    }}
+                    label="Confirm Account Number"
+                  />
                 </Formpan>
-                <Button>Submit</Button>
+                <TextField
+                  style={{ width: "150px" }}
+                  id="ifscCode"
+                  onChange={e => {
+                    HandleChange(e.target.value,"ifscCode");
+                }}
+                  label="IFSC Code"
+                />
+                <Button
+                  topmargin
+                  flag={flag}
+                  onClick={() => toggle("Demat Account Details")}
+                >
+                  Submit
+                </Button>
               </Formsec>
             </div>
           )}
-          {clicked === "Bank Account Details" && (
-            <div style={{ width: "50%" }}>{clicked}</div>
-          )}
-          {clicked === "Demat Account Details" && (
-            <div style={{ width: "50%" }}>{clicked}</div>
-          )}
+          {clicked === "Demat Account Details" &&
+            CommonComponent(
+              "dematAccount",
+              "Demat Account Details",
+              "Please enter the below details",
+              "Demat Id",
+              "",
+              "Upload a latest Demat CMR copy or complete eCAS statement in pdf/jpeg/png format",
+              ""
+            )
+          }
         </div>
         <KycFoot>
-          <VerifyansSubmit>Verify & Submit</VerifyansSubmit>
+          <VerifyansSubmit onClick={openPopup}finalButton={finalButton}>Verify & Submit</VerifyansSubmit>
         </KycFoot>
       </KycParent>
     </ParentComponent>
@@ -140,7 +287,6 @@ const KycParent = styled.div`
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 15px 73px -10px rgb(18 34 50 / 8%);
-  //   height: 500px;
   width: 80%;
   margin: 5% 2% 2% 2%;
 `;
@@ -158,10 +304,6 @@ const LeftHalf = styled.div`
   margin-top: 3%;
   margin-left: 3%;
 `;
-const Divide = styled.div`
-  display: flex;
-  align-items: center;
-`;
 const PanCard = styled.div`
   background: #edfafb;
   padding: 22px 20px 24px 30px;
@@ -173,7 +315,6 @@ const PanCard = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
-//   background: ${(props) => (props.flag ? "pink" : "black")}
 
 //   &:active {
 //     border-color: red;   
@@ -202,7 +343,8 @@ const UploadArea = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-
+    border-radius:12px;
+    height:43px;
 }
 `;
 const Label = styled.div`
@@ -230,6 +372,8 @@ const Divider = styled.div`
   position: relative;
   width: 100%;
   border-top: 1px solid rgba(227, 230, 235, 0.8);
+  margin-top: 10%;
+  margin-bottom: 10%;
 `;
 const DividerSpan = styled.span`
   width: 40px;
@@ -244,7 +388,7 @@ const DividerSpan = styled.span`
   font-weight: 500;
   letter-spacing: -0.08px;
   position: absolute;
-  left: 210px;
+  left: 190px;
   top: -20px;
   z-index: 3;
 `;
@@ -273,12 +417,15 @@ const Button = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  pointer-events:${(props)=>props.flag? "none":""};
+  box-shadow: 0 18px 11px -5px rgb(18 34 50 / 20%);
   float: right;
   padding: 5px 0px;
   font: 600 14px / normal "Inter", sans-serif;
-  margin-top: 10px;
-  margin-bottom: 55px;
-  background: rgb(83, 187, 83);
+  margin-top: ${(props) => (props.topmargin ? "79px" : "10px")};
+  margin-bottom: ${(props) => (props.topmargin ? "0px" : "43px")};
+  background:${(props)=> props.flag ? "#A9A9A9" :"rgb(83, 187, 83)"};
   color: #000000;
 `;
 const KycFoot = styled.div`
@@ -293,60 +440,20 @@ const VerifyansSubmit = styled.div`
   width: 150px;
   border-radius: 14px;
   height: 25px;
+  pointer-events:${(props)=>props.finalButton? "none":""};
+  background:${(props)=> props.finalButton ? "#A9A9A9" :"rgb(83, 187, 83)"};
   font: 400 14px / normal "Inter", sans-serif;
   font-weight: 600;
-  background: rgb(83, 187, 83);
   box-shadow: 0 18px 11px -5px rgb(18 34 50 / 20%);
   color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 2% 0%;
+  cursor: pointer;
 `;
 const PandisplayName = styled.div`
   display: flex;
   flex-direction: column;
   width: 200px;
 `;
-// const Forminput = styled.input`
-//   width: 66%;
-//   height: 25px;
-//   margin-top: 5px;
-//   padding: 0 0 9px 0;
-//   display: flex;
-//   align-items: center;
-//   font: 400 12px / normal "Inter", sans-serif;
-//   font-weight: 500;
-//   border-width: 0 0 1px 0;
-//   border-radius: 0;
-//   border-color: rgba(18, 34, 50, 0.1);
-//   position: relative;
-//   z-index: 4;
-//   outline: none;
-//   background: transparent;
-// `;
-// const Forminput = styled.input`
-//    border: none;
-//   background-color: none;
-//   outline: 0;
-//   font-size: 25px;
-//   width: 300px;
-//   height: 30px;
-// `
-// const Pantext = styled.span`
-//   font: 400 12px / normal "Inter", sans-serif;
-//   color: #98a6b3;
-//   letter-spacing: 0;
-//   position: absolute;
-//   left: 0;
-// //   transition: all 0.3s ease;
-//   &:hover {
-//     color: green;
-//   }
-// `;
-// const ActiveBlog=styled.div`
-//     border-color: rgba(2, 127, 255, 0.8);
-//     box-shadow: 0 15px 9px -7px rgb(2 127 255 / 30%);
-//     font-weight: 600;
-//     background: #ffffff url(SelectedCardPattern.d0d876e….svg) no-repeat top right;
-// `

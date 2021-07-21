@@ -6,7 +6,7 @@ import HomePage from "./HomePage";
 import ComponentA from "./Component/ComponentA"
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import FormName from "../src/Component/FormName"
-
+import Kycdashboard from "./Container/Kycdashboard"
 const Mycomponent = lazy(()=>import("./Component/myComponent"))
 const FirstName = createContext()
 const SecondName = createContext()
@@ -25,7 +25,8 @@ function App() {
         <Suspense fallback={<div>Loading....</div>}>
         <Mycomponent></Mycomponent>
         </Suspense> */}
-        <FormName/>
+        <Kycdashboard/>
+        {/* <FormName/> */}
         {/* <Switch>
           <Route exact path="/" component={HomePage} />
           <Route exact path="/blogs" component={BlogComponent} />
